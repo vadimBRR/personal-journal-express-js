@@ -17,4 +17,7 @@ export class EntryService {
     return await this.prisma.journalEntry.findUnique({where: {id}})
   }
 
+  async deleteById(id:string):Promise<void>{
+    await this.prisma.journalEntry.delete({where: {id}});
+  }
 }

@@ -45,10 +45,34 @@ export async function getEntryById(
 		if (id) {
 			const entry = await entryService.getEntryById(id)
 			if (!entry) {
-		    res.status(404).json({ message: 'Entry with id:' + id + ' not found!' })
+				res.status(404).json({ message: 'Entry with id:' + id + ' not found!' })
 			} else {
 				res.status(200).json(entry)
 			}
+		} else {
+			res.status(400).json({ message: 'Provide the id!' })
+		}
+	} catch (error) {
+		next(error)
+	}
+}
+
+export async function deleteEntryById(
+	req: Request,
+	res: Response,
+	next: Function
+) {
+	try {
+		const id = req.params.id
+
+		const existing = await entryService.getEntryById(id)
+    console.log("existing?");
+    console.log(existing);
+		if (!existing) {
+			res.status(404).json({ message: `Entry with id: ${id} not found!` })
+		} else {
+			await entryService.deleteById(id)
+			res.status(204).send()
 		}
 	} catch (error) {
 		next(error)
