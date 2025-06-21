@@ -21,3 +21,16 @@ export async function createEntry(
 		next(error)
 	}
 }
+
+export async function getAllEntries(
+	req: Request,
+	res: Response,
+	next: Function
+) {
+	try {
+		const allEntries = await entryService.getAllEntries()
+		res.status(200).json(allEntries)
+	} catch (error) {
+		next(error)
+	}
+}

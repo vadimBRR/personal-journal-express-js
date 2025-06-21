@@ -9,4 +9,8 @@ export class EntryService {
     return await this.prisma.journalEntry.create({data})
   }
 
+  async getAllEntries():Promise<JournalEntry[]>{
+    return await this.prisma.journalEntry.findMany()
+  }
+
 }
