@@ -13,4 +13,8 @@ export class EntryService {
     return await this.prisma.journalEntry.findMany()
   }
 
+  async getEntryById(id:string):Promise<JournalEntry | null>{
+    return await this.prisma.journalEntry.findUnique({where: {id}})
+  }
+
 }

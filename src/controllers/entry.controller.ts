@@ -34,3 +34,23 @@ export async function getAllEntries(
 		next(error)
 	}
 }
+
+export async function getEntryById(
+	req: Request,
+	res: Response,
+	next: Function
+) {
+	try {
+		const id = req.params?.id
+		if (id) {
+			const entry = await entryService.getEntryById(id)
+			if (!entry) {
+		    res.status(404).json({ message: 'Entry with id:' + id + ' not found!' })
+			} else {
+				res.status(200).json(entry)
+			}
+		}
+	} catch (error) {
+		next(error)
+	}
+}
