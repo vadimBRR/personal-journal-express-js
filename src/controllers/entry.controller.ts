@@ -80,25 +80,24 @@ export async function deleteEntryById(
 	}
 }
 
+export async function updateById(req: Request, res: Response, next: Function) {
+	try {
+		const id = req.params.id
+		const validData = updateEntryDto.safeParse(req.body)
 
-export async function updateById(req:Request, res:Response, next:Function){
-  try {
-    const id = req.params.id
-    const validData = updateEntryDto.safeParse(req.body)
-    
-    if(!validData.success){
-      res.status(400).json({message: validData.error.errors})
-    }else{  
-      const existing = await entryService.getEntryById(id);
-      
-      if(!existing){
-        res.status(404).json({message: `Entry with id ${id} not found!`})
-      }else{
-        const updateEntry = await entryService.updateById(id, validData.data)
-        res.status(200).json(updateEntry)
-      }
-    }
-  } catch (error) {
-    next(error)
-  }
+		if (!validData.success) {
+			res.status(400).json({ message: validData.error.errors })
+		} else {
+			const existing = await entryService.getEntryById(id)
+
+			if (!existing) {
+				res.status(404).json({ message: `Entry with id ${id} not found!` })
+			} else {
+				const updateEntry = await entryService.updateById(id, validData.data)
+				res.status(200).json(updateEntry)
+			}
+		}
+	} catch (error) {
+		next(error)
+	}
 }

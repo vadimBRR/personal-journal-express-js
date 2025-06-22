@@ -5,32 +5,30 @@ import dotenv from 'dotenv'
 import { prisma } from './db/prisma'
 
 dotenv.config()
-const app = express();
-
+const app = express()
 
 async function main() {
-  app.use(json())
+	app.use(json())
 
-  // router
-  app.use('/api',entryRouter)
+	// router
+	app.use('/api', entryRouter)
 
-  // 404 fallback
-  app.all(/(.*)/, (req, res)=> {
-    res.status(404).json({message: "Not found!"})
-  })
+	// 404 fallback
+	app.all(/(.*)/, (req, res) => {
+		res.status(404).json({ message: 'Not found!' })
+	})
 
-  // error handler
-  app.use((err:Error, req: Request, res: Response, next: Function)=>{
-    console.error(err);
-    res.status(500).json({message: "Something went wrong!"})
-    
-  })
+	// error handler
+	app.use((err: Error, req: Request, res: Response, next: Function) => {
+		console.error(err)
+		res.status(500).json({ message: 'Something went wrong!' })
+	})
 
-  // start server
-  const PORT = process.env.PORT || 4200
-  app.listen(PORT, ()=> {
-    console.log(`Server is running on ${PORT}`);
-  })
+	// start server
+	const PORT = process.env.PORT || 4200
+	app.listen(PORT, () => {
+		console.log(`Server is running on ${PORT}`)
+	})
 }
 
 main()
