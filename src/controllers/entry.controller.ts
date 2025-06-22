@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { EntryService } from '@/services/entry.service'
 import { createEntryDto } from '@/dto/createEntry.dto'
+import { updateEntryDto } from '@/dto/updateEntry.dto'
 
 const entryService = new EntryService()
 
@@ -66,8 +67,8 @@ export async function deleteEntryById(
 		const id = req.params.id
 
 		const existing = await entryService.getEntryById(id)
-    console.log("existing?");
-    console.log(existing);
+		console.log('existing?')
+		console.log(existing)
 		if (!existing) {
 			res.status(404).json({ message: `Entry with id: ${id} not found!` })
 		} else {
@@ -77,4 +78,27 @@ export async function deleteEntryById(
 	} catch (error) {
 		next(error)
 	}
+}
+
+
+export async function updateById(req:Request, res:Response, next:Function){
+  try {
+    const id = req.params.id
+    const validData = updateEntryDto.safeParse(req.body)
+    
+    if(!validData.success){
+      res.status(400).json({message: validData.error.errors})
+    }else{  
+      const existing = await entryService.getEntryById(id);
+      
+      if(!existing){
+        res.status(404).json({message: `Entry with id ${id} not found!`})
+      }else{
+        const updateEntry = await entryService.updateById(id, validData.data)
+        res.status(200).json(updateEntry)
+      }
+    }
+  } catch (error) {
+    next(error)
+  }
 }
