@@ -3,6 +3,7 @@ import { entryRouter } from './routes/entry.routes'
 import { Request, Response } from 'express'
 import dotenv from 'dotenv'
 import { prisma } from './db/prisma'
+import { authRouter } from './routes/auth.routes'
 
 dotenv.config()
 const app = express()
@@ -12,7 +13,7 @@ async function main() {
 
 	// router
 	app.use('/api', entryRouter)
-
+  app.use('/', authRouter)
 	// 404 fallback
 	app.all(/(.*)/, (req, res) => {
 		res.status(404).json({ message: 'Not found!' })
