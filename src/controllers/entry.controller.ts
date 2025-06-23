@@ -29,9 +29,23 @@ export async function getAllEntries(
 	next: NextFunction
 ) {
 	try {
-    const search = req.query.search as string | undefined
-		const allEntries = await entryService.getAllEntries(search)
-		res.status(200).json(allEntries)
+		const search = req.query.search as string | undefined
+		const page = parseInt(req.query.page as string) || 1
+		const limit = parseInt(req.query.limit as string) || 10
+
+		const { data, total } = await entryService.getAllEntries(
+			page,
+			limit,
+			search
+		)
+		res.status(200).json({
+			data,
+			meta: {
+				total,
+				page,
+				limit,
+			},
+		})
 	} catch (error) {
 		next(error)
 	}
@@ -81,7 +95,11 @@ export async function deleteEntryById(
 	}
 }
 
-export async function updateById(req: Request, res: Response, next: NextFunction) {
+export async function updateById(
+	req: Request,
+	res: Response,
+	next: NextFunction
+) {
 	try {
 		const id = req.params.id
 		const validData = updateEntryDto.safeParse(req.body)
