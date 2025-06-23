@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express'
 const authService = new AuthService()
 
 export async function register(req:Request, res:Response, next:NextFunction){
+  console.log("register");
   try {
     const {email, password} = req.body;
     const user = await authService.register(email, password)
