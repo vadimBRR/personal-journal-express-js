@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'supersecret'
 
 export class AuthService {
 
+  // register
 	// hash password  & bcrypt.hash
 	// create user & prisma.user.create
 	async register(email: string, password: string) {
@@ -18,6 +19,7 @@ export class AuthService {
 		})
 	}
 
+  // login
 	// get user         & prisma.user.findUnique
 	// check password   & bcrypt.compare
   // generating token & jwt.sign({user}, jwt_secret, {options})
@@ -33,7 +35,7 @@ export class AuthService {
 		return { token, user: { id: user.id, email: user.email } }
 	}
 
-
+  // verifyToken
   // verifying token &jwt.verify
 	verifyToken(token: string) {
 		return jwt.verify(token, JWT_SECRET)
