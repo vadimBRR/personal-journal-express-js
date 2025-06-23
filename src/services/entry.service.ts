@@ -10,7 +10,18 @@ export class EntryService {
 		return await this.prisma.journalEntry.create({ data })
 	}
 
-	async getAllEntries(): Promise<JournalEntry[]> {
+	async getAllEntries(search?:string): Promise<JournalEntry[]> {
+    console.log(search);
+    if(search){
+     return await this.prisma.journalEntry.findMany({
+      where: {
+        OR: [
+          {title: {contains: search, mode: 'insensitive'}},
+          {content: {contains:search, mode: 'insensitive'}}
+        ]
+      }
+     })
+    }
 		return await this.prisma.journalEntry.findMany()
 	}
 

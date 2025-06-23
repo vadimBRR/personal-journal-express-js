@@ -26,10 +26,11 @@ export async function createEntry(
 export async function getAllEntries(
 	req: Request,
 	res: Response,
-	next: Function
+	next: NextFunction
 ) {
 	try {
-		const allEntries = await entryService.getAllEntries()
+    const search = req.query.search as string | undefined
+		const allEntries = await entryService.getAllEntries(search)
 		res.status(200).json(allEntries)
 	} catch (error) {
 		next(error)
@@ -39,7 +40,7 @@ export async function getAllEntries(
 export async function getEntryById(
 	req: Request,
 	res: Response,
-	next: Function
+	next: NextFunction
 ) {
 	try {
 		const id = req.params?.id
@@ -61,7 +62,7 @@ export async function getEntryById(
 export async function deleteEntryById(
 	req: Request,
 	res: Response,
-	next: Function
+	next: NextFunction
 ) {
 	try {
 		const id = req.params.id
@@ -80,7 +81,7 @@ export async function deleteEntryById(
 	}
 }
 
-export async function updateById(req: Request, res: Response, next: Function) {
+export async function updateById(req: Request, res: Response, next: NextFunction) {
 	try {
 		const id = req.params.id
 		const validData = updateEntryDto.safeParse(req.body)
