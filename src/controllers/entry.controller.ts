@@ -33,16 +33,19 @@ export async function getAllEntries(
 		const page = parseInt(req.query.page as string) || 1
 		const limit = parseInt(req.query.limit as string) || 10
 
-		const { data, total } = await entryService.getAllEntries(
-			page,
-			limit,
-			search
-		)
+		const { data, totalEntries, totalOnThisPage } =
+			await entryService.getAllEntries(page, limit, search)
+
+		console.log(totalEntries)
+
+		const totalPages = parseInt((totalEntries / limit).toFixed(0))
 		res.status(200).json({
 			data,
 			meta: {
-				total,
-				page,
+				totalOnThisPage,
+				totalEntries,
+				totalPages,
+				currentPage: page,
 				limit,
 			},
 		})

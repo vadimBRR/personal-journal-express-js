@@ -10,38 +10,78 @@ export class EntryService {
 		return await this.prisma.journalEntry.create({ data })
 	}
 
+	// async getAllEntries(
+	// 	page: number,
+	// 	limit: number,
+	// 	search?: string
+	// ): Promise<{
+	// 	data: JournalEntry[]
+	// 	totalOnThisPage: number
+	// 	totalEntries: number
+	// }> {
+	// 	console.log(search)
+	// 	const skip = (page - 1) * limit
+	// 	const take = limit
+
+	// 	console.log(take)
+	// 	if (search) {
+	// 		const [data, totalOnThisPage] = await Promise.all([
+	// 			this.prisma.journalEntry.findMany({
+	// 				where: {
+	// 					OR: [
+	// 						{ title: { contains: search, mode: 'insensitive' } },
+	// 						{ content: { contains: search, mode: 'insensitive' } },
+	// 					],
+	// 				},
+	// 				skip,
+	// 				take,
+	// 			}),
+
+	// 			this.prisma.journalEntry.count({ skip, take }),
+	// 		])
+
+	// 		return { data, totalOnThisPage, totalEntries: data.length }
+	// 	}
+
+	// 	const [data, totalOnThisPage] = await Promise.all([
+	// 		this.prisma.journalEntry.findMany({ skip, take }),
+	// 		this.prisma.journalEntry.count({ skip, take }),
+	// 	])
+
+	// 	return { data, totalOnThisPage, totalEntries: data.length }
+	// }
+
 	async getAllEntries(
 		page: number,
 		limit: number,
 		search?: string
-	): Promise<{ data: JournalEntry[]; total: number }> {
-		console.log(search)
+	): Promise<{
+		data: JournalEntry[]
+		totalOnThisPage: number
+		totalEntries: number
+	}> {
 		const skip = (page - 1) * limit
 		const take = limit
-		if (search) {
-			const [data, total] = await Promise.all([
-				this.prisma.journalEntry.findMany({
-					where: {
-						OR: [
-							{ title: { contains: search, mode: 'insensitive' } },
-							{ content: { contains: search, mode: 'insensitive' } },
-						],
-					},
-					skip,
-					take,
-				}),
+		const where = search
+			? {
+					OR: [
+						{ title: { contains: search, mode: Prisma.QueryMode.insensitive  } },
+						{ content: { contains: search, mode: Prisma.QueryMode.insensitive} },
+					],
+			  }
+			: undefined
 
-				this.prisma.journalEntry.count({ skip, take }),
-			])
+		const [data, totalEntries] = await Promise.all([
+			this.prisma.journalEntry.findMany({
+				where,
+				skip,
+				take,
+			}),
 
-			return { data, total }
-		}
-		const [data, total] = await Promise.all([
-			this.prisma.journalEntry.findMany(),
-			this.prisma.journalEntry.count({ skip, take }),
+      this.prisma.journalEntry.count({})
 		])
 
-		return { data, total }
+		return { data, totalEntries, totalOnThisPage: data.length }
 	}
 
 	async getEntryById(id: string): Promise<JournalEntry | null> {
