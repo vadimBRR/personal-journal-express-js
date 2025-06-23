@@ -5,6 +5,7 @@ import {
 	getEntryById,
 	updateById,
 } from '@/controllers/entry.controller'
+import { authenticate } from '@/middleware/auth.middleware'
 import { Router } from 'express'
 
 const router = Router()
@@ -13,7 +14,7 @@ const router = Router()
 router.post('/entries', createEntry)
 
 // get all entries
-router.get('/entries', getAllEntries)
+router.get('/entries',authenticate, getAllEntries)
 
 // Get entry by id
 router.get('/entries/:id', getEntryById)
