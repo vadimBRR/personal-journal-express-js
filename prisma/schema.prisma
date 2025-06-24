@@ -20,12 +20,17 @@ model JournalEntry {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // foreign key
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
+  id           String         @id @default(cuid())
+  email        String         @unique
+  password     String
+  name         String?
+  createdAt    DateTime       @default(now())
+  JournalEntry JournalEntry[]
 }

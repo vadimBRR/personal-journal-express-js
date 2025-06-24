@@ -5,9 +5,12 @@ export class EntryService {
 	prisma = prisma
 
 	async createEntry(
-		data: Prisma.JournalEntryCreateInput
+		data: Prisma.JournalEntryCreateInput,
+		userId: string
 	): Promise<JournalEntry> {
-		return await this.prisma.journalEntry.create({ data })
+		return await this.prisma.journalEntry.create({
+			data: { ...data, user: { connect: { id: userId } } },
+		})
 	}
 
 	// async getAllEntries(
@@ -51,9 +54,10 @@ export class EntryService {
 	// 	return { data, totalOnThisPage, totalEntries: data.length }
 	// }
 
-	async getAllEntries(
+async getAllEntries(
 		page: number,
 		limit: number,
+    userId: string,
 		search?: string
 	): Promise<{
 		data: JournalEntry[]
@@ -65,8 +69,10 @@ export class EntryService {
 		const where = search
 			? {
 					OR: [
-						{ title: { contains: search, mode: Prisma.QueryMode.insensitive  } },
-						{ content: { contains: search, mode: Prisma.QueryMode.insensitive} },
+						{ title: { contains: search, mode: Prisma.QueryMode.insensitive } },
+						{
+							content: { contains: search, mode: Prisma.QueryMode.insensitive },
+						},
 					],
 			  }
 			: undefined
@@ -78,7 +84,7 @@ export class EntryService {
 				take,
 			}),
 
-      this.prisma.journalEntry.count({})
+			this.prisma.journalEntry.count({}),
 		])
 
 		return { data, totalEntries, totalOnThisPage: data.length }
