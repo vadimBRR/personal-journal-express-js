@@ -7,8 +7,6 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
 		res.status(401).json({ message: 'No token provided' })
 	} else {
-		console.log(`Auth Header: `)
-		console.log(authHeader)
 		const token = authHeader.split(' ')[1]
 
 		try {

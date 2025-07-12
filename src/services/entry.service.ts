@@ -13,51 +13,10 @@ export class EntryService {
 		})
 	}
 
-	// async getAllEntries(
-	// 	page: number,
-	// 	limit: number,
-	// 	search?: string
-	// ): Promise<{
-	// 	data: JournalEntry[]
-	// 	totalOnThisPage: number
-	// 	totalEntries: number
-	// }> {
-	// 	console.log(search)
-	// 	const skip = (page - 1) * limit
-	// 	const take = limit
-
-	// 	console.log(take)
-	// 	if (search) {
-	// 		const [data, totalOnThisPage] = await Promise.all([
-	// 			this.prisma.journalEntry.findMany({
-	// 				where: {
-	// 					OR: [
-	// 						{ title: { contains: search, mode: 'insensitive' } },
-	// 						{ content: { contains: search, mode: 'insensitive' } },
-	// 					],
-	// 				},
-	// 				skip,
-	// 				take,
-	// 			}),
-
-	// 			this.prisma.journalEntry.count({ skip, take }),
-	// 		])
-
-	// 		return { data, totalOnThisPage, totalEntries: data.length }
-	// 	}
-
-	// 	const [data, totalOnThisPage] = await Promise.all([
-	// 		this.prisma.journalEntry.findMany({ skip, take }),
-	// 		this.prisma.journalEntry.count({ skip, take }),
-	// 	])
-
-	// 	return { data, totalOnThisPage, totalEntries: data.length }
-	// }
-
-async getAllEntries(
+	async getAllEntries(
 		page: number,
 		limit: number,
-    userId: string,
+		userId: string,
 		search?: string
 	): Promise<{
 		data: JournalEntry[]

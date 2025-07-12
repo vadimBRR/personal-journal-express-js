@@ -15,8 +15,8 @@ export async function createEntry(
 		if (!validData.success) {
 			res.status(400).json({ message: validData.error.errors })
 		} else {
-      // @ts-ignore
-      const userId = req.userId;
+			// @ts-ignore
+			const userId = req.userId
 			const response = await entryService.createEntry(validData.data, userId)
 			res.status(201).json(response)
 		}
@@ -35,13 +35,11 @@ export async function getAllEntries(
 		const page = parseInt(req.query.page as string) || 1
 		const limit = parseInt(req.query.limit as string) || 10
 
-    // @ts-ignore
-    const userId = req.userId;
+		// @ts-ignore
+		const userId = req.userId
 
 		const { data, totalEntries, totalOnThisPage } =
 			await entryService.getAllEntries(page, limit, userId, search)
-
-		console.log(totalEntries)
 
 		const totalPages = parseInt((totalEntries / limit).toFixed(0))
 		res.status(200).json({
@@ -128,3 +126,5 @@ export async function updateById(
 		next(error)
 	}
 }
+
+
